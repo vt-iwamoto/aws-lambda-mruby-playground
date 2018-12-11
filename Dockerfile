@@ -7,6 +7,12 @@ RUN make install
 
 RUN ruby-install ruby 2.5.3
 RUN ln -s /opt/rubies/ruby-2.5.3/bin/ruby /usr/local/bin/ruby
+RUN ln -s /opt/rubies/ruby-2.5.3/bin/rake /usr/local/bin/rake
 
-RUN ruby-install mruby 1.4.1
-RUN ln -s /opt/rubies/mruby-1.4.1/bin/mrbc /usr/local/bin/mrbc
+WORKDIR ..
+RUN curl -Lo mruby-2.0.0.zip https://github.com/mruby/mruby/archive/2.0.0.zip
+RUN unzip mruby-2.0.0.zip
+WORKDIR mruby-2.0.0
+COPY build_config.rb /var/task/mruby-2.0.0/build_config.rb
+RUN rake
+RUN ln -s /var/task/mruby-2.0.0/bin/mrbc /usr/local/bin/mrbc
